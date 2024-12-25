@@ -2,6 +2,7 @@
 #define _game_h
 
 #include "object.h"
+#include <assert.h>
 
 struct Monster {
     Object proto;
