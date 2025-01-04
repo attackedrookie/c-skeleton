@@ -31,10 +31,10 @@ run: $(TARGET)
 	./$(TARGET)
 
 # 构建测试文件目标
-test: $(TEST_TARGET)
+test: $(TEST_TARGET) $(TEST_OBJS)
 	@echo "building test objects..."
 # 运行测试可执行文件
-test_run: $(TEST_TARGET)
+test_run: $(TEST_TARGET) $(TEST_OBJS)
 	./$(TEST_TARGET)
 
 # build/*.d 的规则由 src/和tests/*.c文件生成:
