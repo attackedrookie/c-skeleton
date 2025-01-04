@@ -1,26 +1,27 @@
-SRC_DIR = ./src
-TEST_DIR = ./tests
+SRC_DIR = ./src/list/src
+TEST_DIR = ./src/list/tests
 BUILD_DIR = ./build
 BIN_DIR = ./bin
 TARGET = $(BIN_DIR)/main.out
 TEST_TARGET = $(BIN_DIR)/test.out
 
 CC = cc
-CFLAGS = -Wall -g
+CFLAGS = -Wall -g -std=c99 
+ 
  
 # ./src/*.c
-SRC_SRCS = $(shell find $(SRC_DIR) -name '*.c')
+SRC_SRCS := $(wildcard $(SRC_DIR)/*.c)
 # ./tests/*.c
-TEST_SRCS := $(shell find $(TEST_DIR) -name '*.c')
+TEST_SRCS := $(wildcard $(TEST_DIR)/*.c)
 
 # ./src/*.c => ./build/*.o
-SRC_OBJS = $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRC_SRCS))
+SRC_OBJS := $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRC_SRCS))
 # ./tests/*.c => ./build/*.o
-TEST_OBJS = $(patsubst $(TEST_DIR)/%.c,$(BUILD_DIR)/%.o,$(TEST_SRCS))
+TEST_OBJS := $(patsubst $(TEST_DIR)/%.c,$(BUILD_DIR)/%.o,$(TEST_SRCS))
 # ./src/*.c => ./build/*.d
-SRC_DEPS = $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.d,$(SRC_SRCS))
+SRC_DEPS := $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.d,$(SRC_SRCS))
 # ./tests/*.c => ./build/*.d
-TEST_DEPS = $(patsubst $(TEST_DIR)/%.c,$(BUILD_DIR)/%.d,$(TEST_SRCS))
+TEST_DEPS := $(patsubst $(TEST_DIR)/%.c,$(BUILD_DIR)/%.d,$(TEST_SRCS))
  
 
 # 默认目标:构建src目录下的可执行文件
