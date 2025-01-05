@@ -38,21 +38,17 @@ test: $(TEST_TARGET) $(TEST_OBJS)
 test_run: $(TEST_TARGET) $(TEST_OBJS)
 	./$(TEST_TARGET)
 
-# 分别生成 .d 文件,Makefile 可以正确区分这两个 $(BUILD_DIR)/%.d 规则，即使它们的目标模式相同。这是因为 Makefile 的规则匹配是基于依赖关系的。
-$(BUILD_DIR)/%.d: $(SRC_DIR)/%.c
+# build/*.d 的规则由 src/和tests/*.c文件生成:
+$(BUILD_DIR)/%.d: $(SRC_DIR)/%.c $(TEST_DIR)/%.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -MM -MT "$(@:%.d=%.o) $@" $< > $@ 
-
-$(BUILD_DIR)/%.d: $(TEST_DIR)/%.c
-	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -MM -MT "$(@:%.d=%.o) $@" $< > $@ 
+	$(CC) -MM  $< > $@
 
 # build/*.o 的规则由 src/*.c 生成:
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c -o $@ $<
  
-# build/*.o 的规则由 test/*.c 生成: 
+# build/*.o 的规则由 test/*.c 生成:
 $(BUILD_DIR)/%.o: $(TEST_DIR)/%.c
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c -o $@ $<

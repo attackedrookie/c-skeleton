@@ -7,7 +7,7 @@ TEST_TARGET = $(BIN_DIR)/test.out
 WORKSPACE ?= $(shell pwd)
 
 CC = cc
-CFLAGS = -Wall -g -std=c99 
+CFLAGS = -g -std=c99 
  
  
 # ./src/*.c
