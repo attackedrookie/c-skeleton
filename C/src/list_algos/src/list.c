@@ -8,8 +8,8 @@ List *List_create()
     return calloc(1, sizeof(List));
 }
 
-// 清除 List 结构体本身和节点，但不释放 value 指向的内存
-void List_destroy(List *list) {
+// 清除 List 节点
+void List_clear(List *list) {
 
     if (list == NULL) return; // 避免空指针错误
 
@@ -19,31 +19,13 @@ void List_destroy(List *list) {
         free(node); // 释放当前节点
         node = next; // 移动到下一个节点
     }
-
-    free(list); // 释放 List 结构本身
-}
-
-// 不清除 List 结构体本身，但释放 value 指向的内存和节点本身
-void List_clear(List *list) {
-    if (list == NULL) return;
-
-    ListNode *node = list->first;
-    while (node) {
-        ListNode *next = node->next;
-        if (node->value) {
-            free(node->value); // 只释放 value 指向的内存 (如果 value 是动态分配的)
-        }
-        free(node); // 释放节点本身
-        node = next;
-    }
-
     list->first = NULL; // 将 list 恢复到空状态
     list->last = NULL;
     list->count = 0;
 }
 
 
-void List_clear_destroy(List *list) {
+void List_destroy(List *list) {
     List_clear(list);
     free(list);
 }

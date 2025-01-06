@@ -1,15 +1,15 @@
 #include "list_algos.h"
 #include <string.h>
 #include <stdlib.h>
-
-int ascending_order(const void *str_1, const void *str_2) {
+inline int ascending_order(const void *str_1, const void *str_2) {
 
     int a = atoi((char *)str_1);
     int b = atoi((char *)str_2);
+
     return a - b;
 }
 
-int descending_order(const void *str_1, const void *str_2) {
+inline int descending_order(const void *str_1, const void *str_2) {
     
     int a = atoi((char *)str_1);
     int b = atoi((char *)str_2);
@@ -35,46 +35,6 @@ void List_bubble_sort(List *list, List_compare cmp) {
         }
         n--;
     }
-
-error:
-    return;
-}
-
-void List_merge_sort(List *list, List_compare cmp) {
-
-    check(list != NULL, "List is NULL.");
-    check(cmp != NULL, "Compare function is NULL.");
-
-    if (list->count <= 1) {
-        return;
-    }
-
-    List *left = List_create();
-    check_mem(left);
-    List *right = List_create();
-    check_mem(right);
-    
-    ListNode *node = list->first;
-    int middle = list->count / 2;
-    for (int i = 0; i < middle; i++) {
-        List_push(left, node->value);
-        node = node->next;
-    }
-    for (int i = middle; i < list->count; i++) {
-        List_push(right, node->value);
-        node = node->next;
-    }
-
-    List_merge_sort(left, cmp);
-    List_merge_sort(right, cmp);
-
-    List *result = List_merge(left, right, cmp);
-    list->first = result->first;
-    list->last = result->last;
-    list->count = result->count;
-
-    free(left);
-    free(right);
 
 error:
     return;
@@ -110,3 +70,44 @@ List *List_merge(List *left, List *right, List_compare cmp) {
 error:
     return NULL;
 }  
+
+void List_merge_sort(List *list, List_compare cmp) {
+
+    check(list != NULL, "List is NULL.");
+    check(cmp != NULL, "Compare function is NULL.");
+
+    if (list->count <= 1) {
+        return;
+    }
+
+    List *left = List_create();
+    check_mem(left);
+    List *right = List_create();
+    check_mem(right);
+
+    ListNode *node = list->first;
+    int middle = list->count / 2;
+    for (int i = 0; i < middle; i++) {
+        List_push(left, node->value);
+        node = node->next;
+    }
+    for (int i = middle; i < list->count; i++) {
+        List_push(right, node->value);
+        node = node->next;
+    }
+
+    List_merge_sort(left, cmp);
+    List_merge_sort(right, cmp);
+
+    List *result = List_merge(left, right, cmp);
+    list->first = result->first;
+    list->last = result->last;
+    list->count = result->count;
+
+    free(left);
+    free(right);
+
+error:
+    return;
+}
+
