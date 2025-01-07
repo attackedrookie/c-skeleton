@@ -4,19 +4,12 @@
 
 
 typedef struct {
-    char *buffer;
-    int length;
-    int start;
-    int end;
+    char *buffer; // 
+    int length; // 缓冲区空间大小
+    int start; // 读指针位
+    int end; // 写指针位
 } RingBuffer;
 
-struct tagbstring {
-	int mlen;
-	int slen;
-	unsigned char * data;
-};
-
-typedef struct tagbstring * bstring;
 
 RingBuffer *RingBuffer_create(int length);
 
@@ -26,21 +19,13 @@ int RingBuffer_read(RingBuffer *buffer, char *target, int amount);
 
 int RingBuffer_write(RingBuffer *buffer, char *data, int length);
 
-int RingBuffer_empty(RingBuffer *buffer);
+void *RingBuffer_gets(RingBuffer *buffer);
 
-int RingBuffer_full(RingBuffer *buffer);
+#define RingBuffer_available_data(B) (((B)->end - (B)->start + (B)->length) % (B)->length) 
 
-int RingBuffer_available_data(RingBuffer *buffer);
+#define RingBuffer_available_space(B) ((B)->length - RingBuffer_available_data(B) - 1)
 
-int RingBuffer_available_space(RingBuffer *buffer);
-
-bstring RingBuffer_gets(RingBuffer *buffer, int amount);
-
-#define RingBuffer_available_data(B) (((B)->end + 1) % (B)->length - (B)->start - 1)
-
-#define RingBuffer_available_space(B) ((B)->length - (B)->end - 1)
-
-#define RingBuffer_full(B) (RingBuffer_available_data((B)) - (B)->length == 0)
+#define RingBuffer_full(B) (RingBuffer_available_data((B)) + 1 == (B)->length)
 
 #define RingBuffer_empty(B) (RingBuffer_available_data((B)) == 0)
 
@@ -52,8 +37,8 @@ bstring RingBuffer_gets(RingBuffer *buffer, int amount);
 
 #define RingBuffer_ends_at(B) ((B)->buffer + (B)->end)
 
-#define RingBuffer_commit_read(B, A) ((B)->start = ((B)->start + (A)) % (B)->length)
+#define RingBuffer_commit_read(B, A) ((B)->start = ((B)->start + (A)) % (B)->length) //将读指针向前移动A个位置。
 
-#define RingBuffer_commit_write(B, A) ((B)->end = ((B)->end + (A)) % (B)->length)
+#define RingBuffer_commit_write(B, A) ((B)->end = ((B)->end + (A)) % (B)->length) // 将写指针向前移动A个位置。 
 
 #endif
